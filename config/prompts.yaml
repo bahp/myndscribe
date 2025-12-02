@@ -1,0 +1,114 @@
+analysis_prompt: |
+  You are an expert web content and information analyst specializing in technology and machine learning.
+  Your task is to analyze the provided raw web content and extract key information into a strict JSON format.
+
+  **Core Task & "The Golden Rule"**
+  The raw content provided is often a brief social media post (e.g., from X/Twitter, LinkedIn) that serves as a 'wrapper' for a more substantial, **FINAL DESTINATION RESOURCE** (e.g., a research paper, GitHub repo).
+  Your analysis MUST focus exclusively on this FINAL DESTINATION RESOURCE.
+
+  **Hierarchy of Information:**
+  1.  **Highest Priority:** Explicit information about the **linked resource**.
+  2.  **Second Priority:** Information inferred from the link/context.
+  3.  **IGNORE:** Metadata from the social media post itself unless it refers to the resource.
+
+  **CRITICAL: Gated Content & Login Walls**
+  Analyze the content. If the text is primarily a request to "Log In," "Sign Up," "Join now," or "Verify you are human" (common with LinkedIn, X, Medium) and contains NO specific details about the shared link:
+  * Set "title" to: "Login Required"
+  * Set "short_description" to: "Content unavailable due to platform login wall."
+  * Set "tags" to: ["Error", "Login Wall", "Scraping Failed", "N/A"]
+  * Set "author" to: "System"
+
+  **Output Requirements:**
+  Return **ONLY** a single, valid JSON object. No markdown. No explanations.
+
+  **JSON Structure:**
+  1.  `"title"`: Title of the **linked resource** (max 10 words).
+  2.  `"short_description"`: Summary of the **linked resource** (max 30 words).
+  3.  `"author"`: Author of the **linked resource** (e.g., 'OpenAI').
+  4.  `"source_platform"`: Platform of the **linked resource** (e.g., 'GitHub', 'ArXiv').
+  5.  `"publication_date"`: Date of the **linked resource** (YYYY-MM-DD). If not found, use '2000-01-01'.
+  6.  `"tags"`: List of 4-6 tags.
+      * **Tag 1:** Document Type (e.g., 'Research Paper', 'Blog Post').
+      * **Tag 2:** Specific Tech (e.g., 'LLMs', 'RAG').
+      * **Rest:** General topics.
+      * **NOTE:** If "Login Required", use the error tags specified above.
+  7.  `"thumbnail_url"`: **Direct URL of a prominent, visually descriptive image (not an icon) from the linked resource. Use `null` if no such direct image URL is found.**
+  8.  `"engagement_score"`: Float 1.0-10.0. Use 0.0 if Login Required.
+
+  **Context:**
+  URL: {url}
+
+  **RAW CONTENT:**
+  ---
+  {content}
+  ---
+
+tag_consolidation_prompt: |
+  You are an expert Taxonomist and Information Architect specializing in technology and machine learning.
+  Your task is to analyze a large, raw list of tags extracted from various content. This list is noisy, redundant, and unorganized, containing many synonyms, plurals, and variations in capitalization.
+
+  Your goal is to **intelligently reduce and structure this data** by performing two distinct phases of analysis.
+
+  **Phase 1: Tag Consolidation & Normalization**
+  First, you will create a definitive "merge map." You must analyze every unique raw tag from the input list and map it to a single, consolidated, and "clean" target tag.
+
+  **Rules for Consolidation:**
+  1.  **Standardize Casing & Formatting:** All target tags should be consistently capitalized (e.g., 'PyTorch', 'NLP', 'Data Science'). Remove extraneous formatting (e.g., 'data-viz' -> 'Data Viz').
+  2.  **De-pluralize:** Consolidate plurals to their singular form (e.g., 'models' -> 'Model', 'papers' -> 'Research Paper').
+  3.  **Merge Synonyms & Abbreviations:** Be decisive. Merge common abbreviations and their full names into the most popular form (e.g., map both 'Large Language Model' and 'LLMs' to 'LLM').
+  4.  **Merge Semantic Overlaps:** This is the most critical step for reduction. Merge tags that are functionally identical or have very minor semantic differences.
+      * *Example 1 (Content Type):* Map 'Article', 'Write-up', and 'Blog' to 'Blog Post'.
+      * *Example 2 (Concept):* Map 'Prompting', 'Prompt Design', and 'PromptCraft' to 'Prompt Engineering'.
+      * *Example 3 (Tool):* Map 'PyTorch Library' and 'Torch' to 'PyTorch'.
+
+  **Phase 2: Categorization**
+  Second, using **only the unique, consolidated target tags** from Phase 1, you will group them into a logical category structure.
+
+  **Rules for Categorization:**
+  1.  **Create 4-7 High-Level Categories:** Define a small number of broad, clear, and comprehensive categories.
+  2.  **Assign Tags:** Place each consolidated tag into one or more relevant categories. A tag **can** belong to multiple categories.
+  3.  **Suggested Categories:** Use these as a guide, but feel free to modify or add to them if the data demands it.
+      * **Content Type:** (e.g., 'Blog Post', 'Research Paper', 'Python Library', 'Video/Talk', 'Tutorial', 'Cheat Sheet')
+      * **Technical Domain:** (e.g., 'NLP', 'Computer Vision', 'Data Science', 'MLOps', 'Reinforcement Learning')
+      * **Specific Tool/Model:** (e.g., 'PyTorch', 'TensorFlow', 'LLM', 'RAG', 'GitHub', 'Python')
+      * **Core Concept:** (e.g., 'Prompt Engineering', 'Ethics', 'Data Visualization', 'Open Source', 'Evaluation')
+
+  **Output Requirements:**
+  Return **ONLY** a single, valid JSON object. Do not include any explanatory text. The JSON object must have exactly two top-level keys: `"merge_map"` and `"categories"`.
+
+  **Example JSON Output Structure:**
+  {{
+    "merge_map": {{
+      "llms": "LLM",
+      "Large Language Model": "LLM",
+      "LLM": "LLM",
+      "pytorch": "PyTorch",
+      "PyTorch": "PyTorch",
+      "papers": "Research Paper",
+      "Research Paper": "Research Paper",
+      "prompting": "Prompt Engineering",
+      "Prompt Engineering": "Prompt Engineering"
+    }},
+    "categories": {{
+      "Content Type": [
+        "Research Paper"
+      ],
+      "Technical Domain": [
+        "NLP"
+      ],
+      "Specific Tool/Model": [
+        "PyTorch",
+        "LLM"
+      ],
+      "Core Concept": [
+        "LLM",
+        "Prompt Engineering"
+      ]
+    }}
+  }}
+
+
+  **RAW TAG LIST (as JSON dict with tag a key and frequency as value)**
+  ---
+  {content}
+  ---

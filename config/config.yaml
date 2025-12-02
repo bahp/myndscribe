@@ -1,0 +1,43 @@
+paths:
+  input_dir: "./outputs/emails"
+  web_dir: "./web/static/js"
+  base_dir: "./outputs/pipeline"
+  output_dir: "./outputs"
+
+files:
+  raw_data: "data.json"
+  tag_report: "tags_raw.json"
+  tag_mapping_config: "tags_config_pro.json"
+  processed_data: "data_processed.json"
+  js_output: "data.js"
+  link_history: "links_history.json"
+
+pipeline:
+  # Steps to run by default
+  default_steps: ["ingest", "process", "aggregate", "tags", "convert"]
+
+strategies:
+  linkedin:
+    enabled: true
+    headless: false  # Set to true for server runs
+    cookie_domain: ".linkedin.com"
+    cookie_name: "li_at"
+
+  facebook:
+    enabled: true
+    headles: false
+    cookie_domain: '.facebook.com'
+    cookie_nam: 'datr'
+
+  gemini:
+    model_name: "gemini-2.5-flash"
+    max_retries: 5
+    timeout: 15
+
+  consent_bypass:
+    enabled: True
+    headles: false
+
+settings:
+  verbose: true
+  days_back: 360
