@@ -1,0 +1,219 @@
+{
+  "http_status_checks": [
+    {
+      "id": "H1",
+      "name": "Simple Google (Sanity Check)",
+      "url": "https://www.google.com",
+      "expected_status": "alive",
+      "save_output": false
+    },
+    {
+      "id": "H2",
+      "name": "HTTP 404 (Not Found)",
+      "url": "https://httpbingo.org/status/404",
+      "expected_status": "broken",
+      "save_output": false
+    },
+    {
+      "id": "H3",
+      "name": "HTTP 403 (Forbidden)",
+      "url": "https://httpbingo.org/status/403",
+      "expected_status": "access_denied",
+      "save_output": false
+    },
+    {
+      "id": "H4",
+      "name": "HTTP 500 (Server Error)",
+      "url": "https://httpbingo.org/status/500",
+      "expected_status": "http_error",
+      "save_output": false
+    },
+    {
+      "id": "H5",
+      "name": "Timeout Simulation (20s)",
+      "url": "https://httpbin.org/delay/20",
+      "expected_status": "timeout",
+      "save_output": false
+    },
+    {
+      "id": "H6",
+      "name": "Invalid DNS",
+      "url": "https://this-domain-definitely-does-not-exist-12345.com",
+      "expected_status": "invalid_entry",
+      "save_output": false
+    }
+  ],
+  "consent_bypass_success": [
+    {
+      "id": "C1",
+      "name": "Guardian (Sourcepoint Iframe) - Accept All",
+      "url": "https://www.theguardian.com/international",
+      "expected_status": "success",
+      "save_output": false
+    },
+    {
+      "id": "C2",
+      "name": "Evening Standard - Accept All Cookies",
+      "url": "https://www.standard.co.uk/",
+      "expected_status": "success",
+      "save_output": false
+    },
+    {
+      "id": "C3",
+      "name": "Independent - Accept All",
+      "url": "https://www.independent.co.uk/",
+      "expected_status": "success",
+      "save_output": false
+    },
+    {
+      "id": "C4",
+      "name": "CNN International - Accept",
+      "url": "https://edition.cnn.com/",
+      "expected_status": "success",
+      "save_output": false
+    },
+    {
+      "id": "C5",
+      "name": "Washington Post - Accept All",
+      "url": "https://www.washingtonpost.com/",
+      "expected_status": "success",
+      "save_output": false
+    }
+  ],
+  "consent_bypass_failure": [
+    {
+      "id": "F1",
+      "name": "Example.com - No Banner (Should fail bypass)",
+      "url": "https://example.com/",
+      "expected_status": "consent_failure",
+      "save_output": false
+    },
+    {
+      "id": "F2",
+      "name": "Spiegel.de - German Lang (Should fail)",
+      "url": "https://www.spiegel.de/international/",
+      "expected_status": "consent_failure",
+      "save_output": false
+    },
+    {
+      "id": "F3",
+      "name": "Bloomberg - Paywall (Not Consent)",
+      "url": "https://www.bloomberg.com/",
+      "expected_status": "consent_failure",
+      "save_output": false
+    },
+    {
+      "id": "F4",
+      "name": "NYTimes - Login Wall (Not Consent)",
+      "url": "https://www.nytimes.com/",
+      "expected_status": "consent_failure",
+      "save_output": false
+    }
+  ],
+  "google_ecosystem": [
+    {
+      "id": "G1",
+      "name": "Gemini Share Link",
+      "url": "https://gemini.google.com/share/47410768bb31",
+      "expected_status": "success",
+      "save_output": true,
+      "file_name": "google_bypass_success.html"
+    },
+    {
+      "id": "G2",
+      "name": "YouTube EU",
+      "url": "https://www.youtube.com/",
+      "expected_status": "success",
+      "save_output": false
+    },
+    {
+      "id": "G3",
+      "name": "Google News EU",
+      "url": "https://news.google.com/",
+      "expected_status": "success",
+      "save_output": false
+    }
+  ],
+  "cmp_provider_tests": [
+    {
+      "id": "CMP1",
+      "name": "Cisco (OneTrust)",
+      "url": "https://www.cisco.com/",
+      "expected_status": "success",
+      "save_output": false
+    },
+    {
+      "id": "CMP2",
+      "name": "The Verge (Quantcast)",
+      "url": "https://www.theverge.com/",
+      "expected_status": "success",
+      "save_output": false
+    },
+    {
+      "id": "CMP3",
+      "name": "Euronews (Didomi)",
+      "url": "https://www.euronews.com/",
+      "expected_status": "success",
+      "save_output": false
+    },
+    {
+      "id": "CMP4",
+      "name": "TechRadar (Cookiebot)",
+      "url": "https://www.techradar.com/",
+      "expected_status": "success",
+      "save_output": false
+    }
+  ],
+  "login_walls": [
+    {
+      "id": "L1",
+      "name": "Quora (Immediate Login Wall)",
+      "url": "https://www.quora.com/What-is-the-future-of-AI",
+      "expected_status": "login_wall",
+      "save_output": true,
+      "file_name": "quora_login_wall.html"
+    }
+  ],
+  "linkedin_specialized": [
+    {
+      "id": "LI1",
+      "name": "LinkedIn Post (Valid)",
+      "url": "https://www.linkedin.com/posts/activity-7369361306476302336-bviM",
+      "expected_status": "alive",
+      "save_output": true,
+      "file_name": "linkedin_post_alive.html"
+    },
+    {
+      "id": "LI2",
+      "name": "LinkedIn Post (Broken/Missing/Low content)",
+      "url": "https://www.linkedin.com/posts/activity-9999999999999999999-XXXX",
+      "expected_status": "low_content",
+      "save_output": true,
+      "file_name": "linkedin_post_broken.html"
+    },
+    {
+      "id": "LI3",
+      "name": "LinkedIn Post (Broken)",
+      "url": "https://www.linkedin.com/posts/pascalbiese_agentevolver-towards-efficient-self-evolving-activity-7400844158564974592-9FnC",
+      "expected_status": "alive",
+      "save_output": true,
+      "file_name": "linkedin_login_wall_1.html"
+    },
+    {
+      "id": "LI4",
+      "name": "LinkedIn Post (Broken)",
+      "url": "https://www.linkedin.com/posts/genai-works_artificialintelligence-huggingface-opensource-activity-7364544382085005312-DV7r",
+      "expected_status": "broken",
+      "save_output": true,
+      "file_name":  "linkedin_login_wall_2.html"
+    },
+    {
+      "id": "LI5",
+      "name": "LinkedIn Post (Broken)",
+      "url": "https://www.linkedin.com/posts/taaft_ai-artificialintelligence-chatgpt-activity-7280762308446846977-USmO",
+      "expected_status": "broken",
+      "save_output": true,
+      "file_name": "linkedin_login_wall_3.html"
+    }
+  ]
+}
